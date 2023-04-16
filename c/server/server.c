@@ -231,6 +231,7 @@ int main(int argc, char *argv[])
         switch (choice_admin)
         {
         case 1:
+          printf("Admin wanna add a contact\n");
           bzero(&c, sizeof(c));
           valread = 0;
           valread = recv(newsockfd, c.nom, sizeof(c.nom), 0);
@@ -254,10 +255,12 @@ int main(int argc, char *argv[])
           valread = recv(newsockfd, c.pays, sizeof(c.pays), 0);
           c.pays[strlen(c.pays)] = '\0';
           Ajouter("contacts.txt", c);
+          Afficher(c);
           bzero(&c, sizeof(c));
 
           break;
         case 2:
+          printf("Admin wanna look for a contact\n");
           valread = 0;
           valread = recv(newsockfd, nom, sizeof(nom), 0);
           nom[strlen(nom)] = '\0';
@@ -270,18 +273,22 @@ int main(int argc, char *argv[])
 
           break;
         case 3:
+          printf("Admin wanna delete a contact\n");
           valread = 0;
           valread = recv(newsockfd, nom, sizeof(nom), 0);
           nom[strlen(nom)] = '\0';
           valread = 0;
           valread = recv(newsockfd, prenom, sizeof(prenom), 0);
           prenom[strlen(prenom)] = '\0';
+          printf("Delete: %s %s\n", nom, prenom);
+
           Supprimer("contacts.txt", nom, prenom, newsockfd);
           bzero(nom, sizeof(nom));
           bzero(prenom, sizeof(prenom));
           break;
         case 4:
           /*modifier un contact*/
+          printf("Admin wanna modify a contact's information\n");
           printf("if the contact does not exist it will be added!\n");
           valread = 0;
           valread = recv(newsockfd, nom, sizeof(nom), 0);
@@ -289,6 +296,8 @@ int main(int argc, char *argv[])
           valread = 0;
           valread = recv(newsockfd, prenom, sizeof(prenom), 0);
           prenom[strlen(prenom)] = '\0';
+          printf("modify: %s %s\n", nom, prenom);
+
           Supprimer("contacts.txt", nom, prenom, newsockfd);
           bzero(nom, sizeof(nom));
           bzero(prenom, sizeof(prenom));
@@ -315,11 +324,13 @@ int main(int argc, char *argv[])
           valread = 0;
           valread = recv(newsockfd, c.pays, sizeof(c.pays), 0);
           c.pays[strlen(c.pays)] = '\0';
+          Afficher(c);
           Ajouter("contacts.txt", c);
           bzero(&c, sizeof(c));
 
           break;
         case 5:
+          printf("Admin wanna show contacts\n");
           bzero(buffer, sizeof(buffer));
           read_("contacts.txt", buffer);
           send(newsockfd, buffer, strlen(buffer), 0);
@@ -350,6 +361,7 @@ int main(int argc, char *argv[])
         switch (choice_user)
         {
         case 1:
+          printf("User wanna look for a contact\n");
           valread = 0;
           valread = recv(newsockfd, nom, sizeof(nom), 0);
           nom[strlen(nom)] = '\0';
@@ -361,6 +373,7 @@ int main(int argc, char *argv[])
           bzero(prenom, sizeof(prenom));
           break;
         case 2:
+          printf("User wanna show contacts\n");
           bzero(buffer, sizeof(buffer));
           read_("contacts.txt", buffer);
           send(newsockfd, buffer, strlen(buffer), 0);
